@@ -17,6 +17,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "API_KEY", '"a138f8dc4d7fc897ba68ca1001335902"')
     }
 
     buildTypes {
@@ -66,4 +68,8 @@ dependencies {
     implementation "androidx.room:room-runtime:$roomRuntimeVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.paging:paging-runtime:$pagingVersion"
+
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$logging_interceptor_version"
 }

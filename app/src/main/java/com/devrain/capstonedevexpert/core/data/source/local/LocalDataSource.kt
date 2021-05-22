@@ -5,16 +5,16 @@ import com.devrain.capstonedevexpert.core.data.source.local.entity.MovieEntity
 import com.devrain.capstonedevexpert.core.data.source.local.room.MovieDao
 import kotlinx.coroutines.flow.Flow
 
-class LocalDataSource private constructor(private val movieDao: MovieDao) {
+class LocalDataSource(private val movieDao: MovieDao) {
 
-    companion object {
-        private var instance: LocalDataSource? = null
-
-        fun getInstance(movieDao: MovieDao): LocalDataSource =
-            instance ?: synchronized(this) {
-                instance ?: LocalDataSource(movieDao)
-            }
-    }
+//    companion object {
+//        private var instance: LocalDataSource? = null
+//
+//        fun getInstance(movieDao: MovieDao): LocalDataSource =
+//            instance ?: synchronized(this) {
+//                instance ?: LocalDataSource(movieDao)
+//            }
+//    }
 
     fun getAllMovie(): Flow<List<MovieEntity>> = movieDao.getAllMovie()
 

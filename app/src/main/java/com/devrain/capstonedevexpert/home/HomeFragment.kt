@@ -10,15 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.devrain.capstonedevexpert.R
 import com.devrain.capstonedevexpert.core.data.source.Resource
 import com.devrain.capstonedevexpert.core.ui.MovieAdapter
-import com.devrain.capstonedevexpert.core.ui.ViewModelFactory
 import com.devrain.capstonedevexpert.databinding.FragmentHomeBinding
 import com.devrain.capstonedevexpert.detail.DetailMovieActivity
 import com.devrain.capstonedevexpert.favorite.FavoriteFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class HomeFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    //    private lateinit var homeViewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel by viewModel()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -49,8 +50,8 @@ class HomeFragment : Fragment() {
                 Log.d("HOMEFRAGMENT", selectedData.toString())
             }
 
-            val factory = ViewModelFactory.getInstance(requireActivity())
-            homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
+//            val factory = ViewModelFactory.getInstance(requireActivity())
+//            homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
             homeViewModel.movie.observe(viewLifecycleOwner, { tourism ->
                 if (tourism != null) {
@@ -63,7 +64,8 @@ class HomeFragment : Fragment() {
                         is Resource.Error -> {
                             binding.progressBar.visibility = View.GONE
                             binding.viewError.root.visibility = View.VISIBLE
-                            binding.viewError.tvError.text = tourism.message ?: getString(R.string.something_wrong)
+                            binding.viewError.tvError.text =
+                                tourism.message ?: getString(R.string.something_wrong)
                         }
                     }
                 }

@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.devrain.capstonedevexpert.MainActivity
 import com.devrain.capstonedevexpert.R
 import com.devrain.capstonedevexpert.core.ui.MovieAdapter
-import com.devrain.capstonedevexpert.core.ui.ViewModelFactory
 import com.devrain.capstonedevexpert.databinding.FragmentFavoriteBinding
 import com.devrain.capstonedevexpert.detail.DetailMovieActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteFragment : Fragment() {
 
-    private lateinit var favoriteViewModel: FavoriteViewModel
+    //    private lateinit var favoriteViewModel: FavoriteViewModel
+    private val favoriteViewModel: FavoriteViewModel by viewModel()
 
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
@@ -42,12 +43,13 @@ class FavoriteFragment : Fragment() {
                 startActivity(intent)
             }
 
-            val factory = ViewModelFactory.getInstance(requireActivity())
-            favoriteViewModel = ViewModelProvider(this, factory)[FavoriteViewModel::class.java]
+//            val factory = ViewModelFactory.getInstance(requireActivity())
+//            favoriteViewModel = ViewModelProvider(this, factory)[FavoriteViewModel::class.java]
 
             favoriteViewModel.favoriteMovie.observe(viewLifecycleOwner, { dataMovie ->
                 movieAdapter.setData(dataMovie)
-                binding.viewEmpty.root.visibility = if (dataMovie.isNotEmpty()) View.GONE else View.VISIBLE
+                binding.viewEmpty.root.visibility =
+                    if (dataMovie.isNotEmpty()) View.GONE else View.VISIBLE
             })
 
             with(binding.rvMovie) {

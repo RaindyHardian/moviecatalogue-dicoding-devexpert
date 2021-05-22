@@ -8,15 +8,16 @@ import com.bumptech.glide.Glide
 import com.devrain.capstonedevexpert.R
 import com.devrain.capstonedevexpert.core.data.source.local.entity.MovieEntity
 import com.devrain.capstonedevexpert.core.domain.model.Movie
-import com.devrain.capstonedevexpert.core.ui.ViewModelFactory
 import com.devrain.capstonedevexpert.databinding.ActivityDetailMovieBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailMovieActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_DATA = "extra_data"
     }
 
-    private lateinit var detailMovieViewModel: DetailMovieViewModel
+//    private lateinit var detailMovieViewModel: DetailMovieViewModel
+    private val detailMovieViewModel: DetailMovieViewModel by viewModel()
     private lateinit var binding: ActivityDetailMovieBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +27,8 @@ class DetailMovieActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val factory = ViewModelFactory.getInstance(this)
-        detailMovieViewModel = ViewModelProvider(this, factory)[DetailMovieViewModel::class.java]
+//        val factory = ViewModelFactory.getInstance(this)
+//        detailMovieViewModel = ViewModelProvider(this, factory)[DetailMovieViewModel::class.java]
 
         val detailMovie = intent.getParcelableExtra<Movie>(EXTRA_DATA)
         showDetailMovie(detailMovie)

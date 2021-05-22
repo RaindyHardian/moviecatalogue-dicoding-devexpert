@@ -11,6 +11,8 @@ import com.devrain.capstonedevexpert.core.domain.model.Movie
 import com.devrain.capstonedevexpert.core.domain.repository.IMovieRepository
 import com.devrain.capstonedevexpert.core.utils.AppExecutors
 import com.devrain.capstonedevexpert.core.utils.DataMapper
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class MovieRepository private constructor(
     private val remoteDataSource: RemoteDataSource,
@@ -32,32 +34,32 @@ class MovieRepository private constructor(
             }
     }
 
-    override fun getAllMovie(): LiveData<Resource<List<Movie>>> =
-        object : NetworkBoundResource<List<Movie>, List<MovieResponse>>(appExecutors) {
-            override fun loadFromDB(): LiveData<List<Movie>> {
-//                return localDataSource.getAllMovie()
-                return Transformations.map(localDataSource.getAllMovie()) {
-                    DataMapper.mapEntitiesToDomain(it)
-                }
+    override fun getAllMovie(): Flow<Resource<List<Movie>>> =
+        object : NetworkBoundResource<List<Movie>, List<MovieResponse>>() {
+            override fun loadFromDB(): Flow<List<Movie>> {
+//                return Transformations.map(localDataSource.getAllMovie()) {
+//                    DataMapper.mapEntitiesToDomain(it)
+//                }
+                return localDataSource.getAllMovie().map { DataMapper.mapEntitiesToDomain(it) }
             }
 
             override fun shouldFetch(data: List<Movie>?): Boolean =
                 data == null || data.isEmpty()
 
-            override fun createCall(): LiveData<ApiResponse<List<MovieResponse>>> =
+            override suspend fun createCall(): Flow<ApiResponse<List<MovieResponse>>> =
                 remoteDataSource.getAllMovie()
 
-            override fun saveCallResult(data: List<MovieResponse>) {
+            override suspend fun saveCallResult(data: List<MovieResponse>) {
                 val movieList = DataMapper.mapResponsesToEntities(data)
                 localDataSource.insertMovie(movieList)
             }
-        }.asLiveData()
+        }.asFlow()
 
-    override fun getFavoriteMovie(): LiveData<List<Movie>> {
-//        return localDataSource.getFavoriteMovie()
-        return Transformations.map(localDataSource.getFavoriteMovie()) {
-            DataMapper.mapEntitiesToDomain(it)
-        }
+    override fun getFavoriteMovie(): Flow<List<Movie>> {
+//        return Transformations.map(localDataSource.getFavoriteMovie()) {
+//            DataMapper.mapEntitiesToDomain(it)
+//        }
+        return localDataSource.getFavoriteMovie().map { DataMapper.mapEntitiesToDomain(it) }
     }
 
     override fun setFavoriteMovie(movie: Movie, state: Boolean) {

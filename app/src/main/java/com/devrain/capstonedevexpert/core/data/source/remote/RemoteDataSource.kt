@@ -10,6 +10,10 @@ import com.devrain.capstonedevexpert.core.data.source.remote.network.ApiService
 import com.devrain.capstonedevexpert.core.data.source.remote.response.ListMovieResponse
 import com.devrain.capstonedevexpert.core.data.source.remote.response.MovieResponse
 import com.devrain.capstonedevexpert.core.utils.JsonHelper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,41 +30,39 @@ class RemoteDataSource private constructor(private val apiService: ApiService) {
             }
     }
 
-    fun getAllMovie(): LiveData<ApiResponse<List<MovieResponse>>> {
+    fun getAllMovie(): Flow<ApiResponse<List<MovieResponse>>> {
         val resultData = MutableLiveData<ApiResponse<List<MovieResponse>>>()
 
-//        //get data from local json
-//        val handler = Handler(Looper.getMainLooper())
-//        handler.postDelayed({
-//            try {
-//                val dataArray = jsonHelper.loadData()
-//                if (dataArray.isNotEmpty()) {
-//                    resultData.value = ApiResponse.Success(dataArray)
-//                } else {
-//                    resultData.value = ApiResponse.Empty
-//                }
-//            } catch (e: JSONException){
-//                resultData.value = ApiResponse.Error(e.toString())
-//                Log.e("RemoteDataSource", e.toString())
-//            }
-//        }, 2000)
-
         //get data from remote api
-        val client = apiService.getList()
-        client.enqueue(object : Callback<ListMovieResponse> {
-            override fun onResponse(
-                call: Call<ListMovieResponse>,
-                response: Response<ListMovieResponse>
-            ) {
-                val dataArray = response.body()?.results
-                resultData.value = if (dataArray != null) ApiResponse.Success(dataArray) else ApiResponse.Empty
+//        val client = apiService.getList()
+//        client.enqueue(object : Callback<ListMovieResponse> {
+//            override fun onResponse(
+//                call: Call<ListMovieResponse>,
+//                response: Response<ListMovieResponse>
+//            ) {
+//                val dataArray = response.body()?.results
+//                resultData.value = if (dataArray != null) ApiResponse.Success(dataArray) else ApiResponse.Empty
+//            }
+//            override fun onFailure(call: Call<ListMovieResponse>, t: Throwable) {
+//                resultData.value = ApiResponse.Error(t.message.toString())
+//                Log.e("RemoteDataSource", t.message.toString())
+//            }
+//        })
+//
+//        return resultData
+        return flow {
+            try {
+                val response = apiService.getList()
+                val dataArray = response.results
+                if (dataArray.isNotEmpty()){
+                    emit(ApiResponse.Success(response.results))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e : Exception){
+                emit(ApiResponse.Error(e.toString()))
+                Log.e("RemoteDataSource", e.toString())
             }
-            override fun onFailure(call: Call<ListMovieResponse>, t: Throwable) {
-                resultData.value = ApiResponse.Error(t.message.toString())
-                Log.e("RemoteDataSource", t.message.toString())
-            }
-        })
-
-        return resultData
+        }.flowOn(Dispatchers.IO)
     }
 }

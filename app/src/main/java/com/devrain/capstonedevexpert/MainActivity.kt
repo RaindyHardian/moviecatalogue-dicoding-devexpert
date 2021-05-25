@@ -1,13 +1,12 @@
 package com.devrain.capstonedevexpert
 
-import android.graphics.Movie
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import com.devrain.capstonedevexpert.databinding.ActivityMainBinding
-import com.devrain.capstonedevexpert.favorite.FavoriteFragment
 import com.devrain.capstonedevexpert.home.HomeFragment
 
 class MainActivity : AppCompatActivity() {
@@ -16,7 +15,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -38,11 +36,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_favorite -> {
-                val mFavoriteFragment = FavoriteFragment()
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.nav_host_fragment, mFavoriteFragment)
-                    .addToBackStack(null)
-                    .commit()
+                val uri = Uri.parse("capstonedevexpert://favorite")
+                startActivity(Intent(Intent.ACTION_VIEW, uri))
             }
             else -> return true
         }

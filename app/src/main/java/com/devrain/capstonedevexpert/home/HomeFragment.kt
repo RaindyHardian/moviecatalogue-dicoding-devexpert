@@ -5,20 +5,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.devrain.capstonedevexpert.R
-import com.devrain.capstonedevexpert.core.data.source.Resource
 import com.devrain.capstonedevexpert.core.ui.MovieAdapter
 import com.devrain.capstonedevexpert.databinding.FragmentHomeBinding
 import com.devrain.capstonedevexpert.detail.DetailMovieActivity
-import com.devrain.capstonedevexpert.favorite.FavoriteFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class HomeFragment : Fragment() {
 
-    //    private lateinit var homeViewModel: HomeViewModel
     private val homeViewModel: HomeViewModel by viewModel()
 
     private var _binding: FragmentHomeBinding? = null
@@ -50,9 +46,6 @@ class HomeFragment : Fragment() {
                 Log.d("HOMEFRAGMENT", selectedData.toString())
             }
 
-//            val factory = ViewModelFactory.getInstance(requireActivity())
-//            homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
-
             homeViewModel.movie.observe(viewLifecycleOwner, { tourism ->
                 if (tourism != null) {
                     when (tourism) {
@@ -78,28 +71,6 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.option_menu, menu)
-//        super.onCreateOptionsMenu(menu, inflater)
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.menu_favorite -> {
-//                val mCategoryFragment = FavoriteFragment()
-//                val mFragmentManager = fragmentManager
-//                mFragmentManager?.beginTransaction()?.apply {
-//                    replace(R.id.nav_host_fragment, mCategoryFragment, FavoriteFragment::class.java.simpleName)
-//                    addToBackStack(null)
-//                    commit()
-//                }
-//                return true
-//            }
-//            else -> return true
-//        }
-//        return true
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

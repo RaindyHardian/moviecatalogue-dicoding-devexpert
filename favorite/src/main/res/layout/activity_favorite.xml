@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".favorite.FavoriteFragment">
+    tools:context=".FavoriteActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movie"
@@ -13,7 +13,7 @@
         tools:listitem="@layout/item_list_movie" />
 
     <include
-        android:id="@+id/view_empty"
+        android:id="@+id/view_emptyFav"
         layout="@layout/view_empty"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

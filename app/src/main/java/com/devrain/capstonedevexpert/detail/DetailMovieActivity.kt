@@ -16,19 +16,13 @@ class DetailMovieActivity : AppCompatActivity() {
         const val EXTRA_DATA = "extra_data"
     }
 
-//    private lateinit var detailMovieViewModel: DetailMovieViewModel
     private val detailMovieViewModel: DetailMovieViewModel by viewModel()
     private lateinit var binding: ActivityDetailMovieBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_detail_movie)
         binding = ActivityDetailMovieBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-//        val factory = ViewModelFactory.getInstance(this)
-//        detailMovieViewModel = ViewModelProvider(this, factory)[DetailMovieViewModel::class.java]
 
         val detailMovie = intent.getParcelableExtra<Movie>(EXTRA_DATA)
         showDetailMovie(detailMovie)

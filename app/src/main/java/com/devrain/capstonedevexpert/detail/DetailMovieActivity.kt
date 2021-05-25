@@ -38,6 +38,7 @@ class DetailMovieActivity : AppCompatActivity() {
         detailMovie?.let {
             supportActionBar?.title = detailMovie.title
             binding.content.textTitle.text = detailMovie.title
+            binding.content.textYear.text = detailMovie.releaseDate
             binding.content.textSummary.text = detailMovie.overview
             Glide.with(this@DetailMovieActivity)
                 .load("https://image.tmdb.org/t/p/w500" + detailMovie.posterPath)

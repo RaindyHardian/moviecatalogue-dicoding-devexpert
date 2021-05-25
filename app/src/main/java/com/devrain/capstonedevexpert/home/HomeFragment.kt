@@ -56,12 +56,12 @@ class HomeFragment : Fragment() {
             homeViewModel.movie.observe(viewLifecycleOwner, { tourism ->
                 if (tourism != null) {
                     when (tourism) {
-                        is Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
-                        is Resource.Success -> {
+                        is com.devrain.capstonedevexpert.core.data.source.Resource.Loading -> binding.progressBar.visibility = View.VISIBLE
+                        is com.devrain.capstonedevexpert.core.data.source.Resource.Success -> {
                             binding.progressBar.visibility = View.GONE
                             tourismAdapter.setData(tourism.data)
                         }
-                        is Resource.Error -> {
+                        is com.devrain.capstonedevexpert.core.data.source.Resource.Error -> {
                             binding.progressBar.visibility = View.GONE
                             binding.viewError.root.visibility = View.VISIBLE
                             binding.viewError.tvError.text =

@@ -1,15 +1,12 @@
 package com.devrain.capstonedevexpert.core.di
 
 import androidx.room.Room
-import com.devrain.capstonedevexpert.core.data.source.MovieRepository
-import com.devrain.capstonedevexpert.core.data.source.local.LocalDataSource
-import com.devrain.capstonedevexpert.core.data.source.local.entity.MovieDatabase
-import com.devrain.capstonedevexpert.core.data.source.remote.RemoteDataSource
 import com.devrain.capstonedevexpert.core.data.source.remote.network.ApiService
 import com.devrain.capstonedevexpert.core.domain.repository.IMovieRepository
 import com.devrain.capstonedevexpert.core.utils.AppExecutors
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
 import okhttp3.OkHttpClient
-import okhttp3.internal.platform.android.AndroidSocketAdapter.Companion.factory
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
@@ -20,10 +17,13 @@ import java.util.concurrent.TimeUnit
 val databaseModule = module {
     factory { get<com.devrain.capstonedevexpert.core.data.source.local.entity.MovieDatabase>().movieDao() }
     single {
+        val passphrase: ByteArray = SQLiteDatabase.getBytes("very secret key".toCharArray())
+        val factory = SupportFactory(passphrase)
         Room.databaseBuilder(
             androidContext(),
-            com.devrain.capstonedevexpert.core.data.source.local.entity.MovieDatabase::class.java, "Movie.db"
-        ).fallbackToDestructiveMigration().build()
+            com.devrain.capstonedevexpert.core.data.source.local.entity.MovieDatabase::class.java,
+            "Movie.db"
+        ).fallbackToDestructiveMigration().openHelperFactory(factory).build()
     }
 }
 
